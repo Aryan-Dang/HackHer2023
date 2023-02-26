@@ -28,7 +28,7 @@ while True:
     avg1 = getCurrentAvgReading()
     time.sleep(1)
     avg2 = getCurrentAvgReading()
-    if(abs(avg1 - avg2) > 2):
+    if(avg1 - avg2 > 2):
       response = requests.post('http://localhost:3400/sensor', json={
         'mLChanged': str(1.6 * abs(avg1 - avg2))
       })

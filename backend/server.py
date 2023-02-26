@@ -7,7 +7,7 @@ CORS(app)
 waterData = {
   'progress': '0',
   'totalDrank': '0',
-  'intakeGoal': '3000',
+  'intakeGoal': '800',
   'bottleSize': '100'
 }
 
