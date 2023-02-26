@@ -1,58 +1,64 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
-app = Flask(name)
+app = Flask(__name__)
 CORS(app)
 
 waterData = {
-  'waterLevel': '0',
   'progress': '0',
-  'dailyIntake': '3L'
+  'totalDrank': '0',
+  'intakeGoal': '3000',
+  'bottleSize': '100'
 }
 
-#route for changing the level of water
-@app.route('/level',methods=['POST'])
-def changeLevel():
-    print(request)
-    data = request.get_json() # get the json from the post request object
-    print(data["level"])
-    waterData['waterLevel'] = data["level"]
-    return jsonify(waterData) # for the browser to understand that waterData was changed
+# @app.route('/drank',methods=['POST'])
+# def changeLevel():
+#     print(request)
+#     data = request.get_json() # get the json from the post request object
+#     print(data["drank"])
+#     waterData['drank'] = data["drank"]
+#     return jsonify(waterData) # for the browser to understand that waterData was changed
 
+#get waterData
 @app.route('/data')
 def get_data():
   return jsonify(waterData)
 
-@app.route('/progress', methods=['POST'])
-def changeProgress():
-  data = request.get_json()
-  waterData['progress'] = data['progress']
-  return jsonify(waterData)
+# @app.route('/progress', methods=['POST'])
+# def changeProgress():
+#   data = request.get_json()
+#   waterData['progress'] = data['progress']
+#   return jsonify(waterData)
 
-@app.route('/intake', methods=['POST'])
+#change intakeGoal
+@app.route('/intakeGoal', methods=['POST'])
 def changeIntake():
   data = request.get_json()
-  waterData['dailyIntake'] = data['intake']
+  waterData['intakeGoal'] = data['intake']
   return jsonify(waterData)
 
+#get values from water sensor and calculated how much user drank from bottle, and change progress
 @app.route('/sensor', methods=['POST'])
 def sendSensorData():
   data = request.get_json()
-  reading = float(data['sensorReading'])
+  reading = float(data['mLChanged'])
   print("Reading:",reading)
-  #130 max, 46 low
-  if reading <= 46.0 and reading > 0:
-    waterData['progress'] = '25'
-  elif reading > 46.0 and reading <= 88.0:
-    waterData['progress'] = '50'
-  elif reading > 88 and reading < 110:
-    waterData['progress'] = '100'
-  print(waterData)
+  totalDrankVal = float(waterData["totalDrank"]) + reading
+  waterData["totalDrank"] = totalDrankVal
+  waterData["progress"] = totalDrankVal/(int(waterData["intakeGoal"]))
   return jsonify(waterData)
+
+#change bottle size
+@app.route('/bottle', methods=['POST'])
+def changeBottleSize():
+  data = request.get_json()
+  waterData['bottleSize'] = data['bottleSize']
+  return jsonify(waterData)
+  
  
 @app.route("/")
 def showHomePage():
     return "This is home page"
 
-if name == "main":
+if __name__ == "__main__":
   app.run(host="0.0.0.0", port="3400")
