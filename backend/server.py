@@ -7,7 +7,7 @@ CORS(app)
 
 waterData = {
   'waterLevel': '0',
-  'progress': '0',
+  'progress': '40',
   'dailyIntake': '3L'
 }
 
