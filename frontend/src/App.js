@@ -6,8 +6,10 @@ function App() {
 
   const getPosts = async () => {
     try {
-      const response = await fetch("http://172.31.242.111:3400/data", { mode: 'no-cors'})
-      console.log(response)
+      console.log("Hello");
+      const response = await fetch("http://localhost:3400/data")
+      console.log("fetch done");
+      // console.log(response)
       if (!response.ok) {
         throw Error(response.statusText)
       }
