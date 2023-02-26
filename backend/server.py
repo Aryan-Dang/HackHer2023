@@ -5,7 +5,8 @@ app = Flask(__name__)
 
 waterData = {
   'waterLevel': '0',
-  'progress': '0'
+  'progress': '0',
+  'dailyIntake': '3L'
 }
 
 #route for changing the level of water
@@ -24,9 +25,14 @@ def get_data():
 @app.route('/progress', methods=['POST'])
 def changeProgress():
   data = request.get_json()
-  waterData['progress'] = data["progress"]
+  waterData['progress'] = data['progress']
   return jsonify(waterData)
 
+@app.route('/intake', methods=['POST'])
+def changeIntake():
+  data = request.get_json()
+  waterData['dailyIntake'] = data['intake']
+  return jsonify(waterData)
  
 @app.route("/")
 def showHomePage():
