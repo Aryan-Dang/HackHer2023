@@ -45,7 +45,7 @@ def sendSensorData():
   print("Reading:",reading)
   totalDrankVal = float(waterData["totalDrank"]) + reading
   waterData["totalDrank"] = totalDrankVal
-  waterData["progress"] = totalDrankVal/(int(waterData["intakeGoal"]))
+  waterData["progress"] = int(totalDrankVal/(int(waterData["intakeGoal"]))*100)
   return jsonify(waterData)
 
 #change bottle size
