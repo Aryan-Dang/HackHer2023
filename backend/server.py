@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
+CORS(app)
 
 waterData = {
   'waterLevel': '0',
-  'progress': '0',
+  'progress': '40',
   'dailyIntake': '3L'
 }
 
@@ -39,4 +41,4 @@ def showHomePage():
     return "This is home page"
 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0")
+  app.run(host="0.0.0.0", port=3400)
