@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
-
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
 
 waterData = {
   'waterLevel': '0',
@@ -33,10 +34,23 @@ def changeIntake():
   data = request.get_json()
   waterData['dailyIntake'] = data['intake']
   return jsonify(waterData)
+
+@app.route('/sensor', methods=['POST'])
+def sendSensorData():
+  data = request.get_json()
+  reading = float(data['sensorReading'])
+  #130 max, 46 low
+  if reading <= 46.0 and reading > 0:
+    data['progress'] = '25'
+  elif reading > 46.0 and reading <= 88.0:
+    data['progress'] = '50'
+  elif reading > 88 and reading < 110:
+    data['progress'] = '100'
+  return jsonify(waterData)
  
 @app.route("/")
 def showHomePage():
     return "This is home page"
 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0")
+  app.run(host="0.0.0.0", port="3400")
